@@ -1,6 +1,6 @@
 import pynvml
 
-def get_lowest_gpu(
+def GetLowestGPU(
     devices: list = None, 
     verbose: bool = False,
 ):
