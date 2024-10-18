@@ -1,0 +1,12 @@
+LICENSE
+README.md
+setup.py
+DGXutils/GetFileNames.py
+DGXutils/GetLowestGPU.py
+DGXutils/__init__.py
+DGXutils.egg-info/PKG-INFO
+DGXutils.egg-info/SOURCES.txt
+DGXutils.egg-info/dependency_links.txt
+DGXutils.egg-info/requires.txt
+DGXutils.egg-info/top_level.txt
+tests/testGetLowestGPU.py
