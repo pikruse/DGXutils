@@ -9,4 +9,4 @@ DGXutils.egg-info/SOURCES.txt
 DGXutils.egg-info/dependency_links.txt
 DGXutils.egg-info/requires.txt
 DGXutils.egg-info/top_level.txt
-tests/testGetLowestGPU.py
+tests/test.py
