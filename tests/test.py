@@ -7,3 +7,6 @@ class TestDGXutils(unittest.TestCase):
 
     def test_GetFileNames(self):
         self.assertEqual(GetFileNames('test_dir', '.txt'), ["test.txt"])
+
+if __name__ == '__main__':
+    unittest.main()
