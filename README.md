@@ -7,3 +7,4 @@ The `DGXutils` package contains various functions for use on the DGX computing c
 * **`GetFileNames()`:** This function returns a list of file names with a given extension from the specified directory.
 
 ## Installation
+run `pip install git+https://github.com/pikruse/DGXutils.git` in your terminal to install.
