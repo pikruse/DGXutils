@@ -1,68 +1,60 @@
-import subprocess, torch
-import numpy as np
+import pynvml
 
-def GetLowestGPU(pick_from=[0,1,2,3,4,5,6,7], verbose=1, return_usages=False):
+def get_lowest_gpu(
+    devices: list = None, 
+    verbose: bool = False,
+):
     
-    '''
-    Runs nvidia-smi command to pick GPU with lowest memory usage.
-    
-    Args: 
-        pick_from:     integer list of gpus to choose from
-        verbose:       boolean for whether to print which device was chosen
-        return_usages: boolean for whether to return all GPU memory usages
-        
-    Returns:
-        device: device string (e.g. 'cuda:0' or 'cpu' if no cuda devices)
-        usages: optional list of integer memory usage per GPU
-    '''
-    
-    # first, if no GPUs available or provided, return CPU
-    if not torch.cuda.is_available() or len(pick_from)==0:
-        if verbose==1 or verbose==2:
-            print('Device set to cpu')
-        return 'cpu'
-    
-    # if using GPU, run nvidia-smi command from terminal
-    nvidia_smi = subprocess.Popen(['nvidia-smi'], stdout=subprocess.PIPE)
-    
-    # byte string -> utf8 string -> list with each line of nvidia-smi
-    nvidia_smi = nvidia_smi.communicate()[0].decode('utf8').split('\n')
-    
-    # initialize empty list of GPU memory usages
-    usages = []
+    # initialize NVML
+    pynvml.nvmlInit()
+    device_count = pynvml.nvmlDeviceGetCount()
+    min_memory_usage = None
+    min_memory_gpu_index = None
 
-    # parse each line of nvidia-smi output
-    for line in nvidia_smi:
+    # iterate over available GPUs
+    for i in range(device_count):
 
-        # check if line contains GPU usage statistics
-        str_idx = line.find('MiB / ')
-        
-        # if so, grab memory amount
-        if str_idx != -1:
-            usages.append(int(line[str_idx-7:str_idx]))
+        # skip if device not in list of devices
+        if devices is not None and i not in devices:
+            continue
 
-    # sort GPUs based on usage
-    gpus_sorted = np.argsort(usages)
-    
-    # pick GPU with smallest usage from provided list
-    for idx in gpus_sorted:
-        if idx in pick_from:
-            gpu = idx
-            break
-    device = 'cuda:' + str(gpu)
-    
-    if verbose==1:
-        print('Device set to ' + device) 
-    if verbose==2:
-        print('---------------------------')
-        print(' GPU | Memory-usage    ')
-        print('---------------------------')
-        for i, usage in enumerate(usages):
-            print('  '+str(i)+'  | '+str(usage).zfill(5)+'MiB / 40537MiB')
-        print('---------------------------')
-        print(' Device set to ' + device) 
-        print('---------------------------')
-    if return_usages:
-        return device, usages
+        # extract information
+        handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+        mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+        memory_usage = mem_info.used
+        total_memory = mem_info.total
+
+        # print GPU memory usage
+        if verbose:
+            memory_usage_mb = memory_usage / (1024 ** 2)
+            total_memory_mb = total_memory / (1024 ** 2)
+            print('cuda:{} {:5.0f}MiB / {:5.0f}MiB'.format(
+                i, memory_usage_mb, total_memory_mb))
+
+        # update GPU with minimum memory usage
+        if min_memory_usage is None or memory_usage < min_memory_usage:
+            min_memory_usage = memory_usage
+            min_memory_gpu_index = i
+
+    # clean up NVML
+    pynvml.nvmlShutdown()
+
+    # set the device string
+    if min_memory_gpu_index is not None:
+        device = f'cuda:{min_memory_gpu_index}'
     else:
-        return device
+        device = 'cpu'
+
+    # print selection
+    if verbose:
+        if min_memory_gpu_index is not None:
+            print()
+        print(f'Device set to: {device}')
+
+    return device
+
+if __name__ == '__main__':
+    import time
+    t0 = time.time()
+    get_lowest_gpu(True)
+    print('Elapsed time: {:.2f} ms'.format((time.time() - t0) * 1000))
