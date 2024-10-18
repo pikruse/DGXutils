@@ -56,5 +56,5 @@ def GetLowestGPU(
 if __name__ == '__main__':
     import time
     t0 = time.time()
-    get_lowest_gpu(True)
+    GetLowestGPU(True)
     print('Elapsed time: {:.2f} ms'.format((time.time() - t0) * 1000))
