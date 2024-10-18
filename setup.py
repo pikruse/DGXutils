@@ -1,16 +1,16 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="package_publishing",
+    name="dgx-utils",
     version="0.1",
     packages=find_packages(),
-    install_requires=[],
-    author="Andy",
-    author_email="andy@dont_spam_me.co",
-    description="A simple example private package",
+    install_requires=["os", "sys", "torch", "subprocess", "numpy"],
+    author="Peter I. Kruse",
+    author_email="peter.ingraham.kruse@gmail.com",
+    description="Utility functions for the DGX computing cluster",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/nydasco/package_publishing",
+    url="https://github.com/pikruse/dgx-utils",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
