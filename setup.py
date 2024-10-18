@@ -4,7 +4,7 @@ setup(
     name="DGXutils",
     version="0.1",
     packages=find_packages(),
-    install_requires=["torch", "numpy"],
+    install_requires=["torch", "numpy", "pynvml"],
     author="Peter I. Kruse, John Lagergren",
     author_email="peter.ingraham.kruse@gmail.com",
     description="Utility functions for the DGX computing cluster",
