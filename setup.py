@@ -10,7 +10,7 @@ setup(
     description="Utility functions for the DGX computing cluster",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/pikruse/dgx-utils",
+    url="https://github.com/pikruse/DGXutils",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
