@@ -1,6 +1,6 @@
 # README
 
-The `DGXutils` package contains various functions for use on the DGX computing cluster at ORNL. Version 0.1 contains two functions: `GetLowestGPU()` and `GetFileNames()`
+The `DGXutils` package contains various functions for use on the DGX computer at ORNL. Version 0.1 contains two functions: `GetLowestGPU()` and `GetFileNames()`
 
 * **`GetLowestGPU()`:** This function returns the GPU with the lowest memory use on the cluster. Returns a device string (e.g. `'cuda:0'` or `'cpu'` if no cuda devices).
 
